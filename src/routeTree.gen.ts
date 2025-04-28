@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as FormwatchImport } from './routes/formwatch'
 import { Route as FormstateImport } from './routes/formstate'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const FormwatchRoute = FormwatchImport.update({
+  id: '/formwatch',
+  path: '/formwatch',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const FormstateRoute = FormstateImport.update({
   id: '/formstate',
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormstateImport
       parentRoute: typeof rootRoute
     }
+    '/formwatch': {
+      id: '/formwatch'
+      path: '/formwatch'
+      fullPath: '/formwatch'
+      preLoaderRoute: typeof FormwatchImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/formstate': typeof FormstateRoute
+  '/formwatch': typeof FormwatchRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/formstate': typeof FormstateRoute
+  '/formwatch': typeof FormwatchRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/formstate': typeof FormstateRoute
+  '/formwatch': typeof FormwatchRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/formstate'
+  fullPaths: '/' | '/formstate' | '/formwatch'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/formstate'
-  id: '__root__' | '/' | '/formstate'
+  to: '/' | '/formstate' | '/formwatch'
+  id: '__root__' | '/' | '/formstate' | '/formwatch'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FormstateRoute: typeof FormstateRoute
+  FormwatchRoute: typeof FormwatchRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FormstateRoute: FormstateRoute,
+  FormwatchRoute: FormwatchRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/formstate"
+        "/formstate",
+        "/formwatch"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/formstate": {
       "filePath": "formstate.tsx"
+    },
+    "/formwatch": {
+      "filePath": "formwatch.tsx"
     }
   }
 }

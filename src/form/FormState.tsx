@@ -1,10 +1,11 @@
 import { useFormContext, useFormState } from "react-hook-form";
 import { Button } from "../components/Button";
 import { Heading } from "../components/Heading";
-import { AppContextForm } from "../form/AppContextForm";
-import { AppFormProvider } from "../form/AppFormProvider";
 import { RerenderCount } from "../RerenderCount";
 import type { AppFormFields } from "../types";
+import { AppContextForm } from "./AppContextForm";
+import { AppFormProvider } from "./AppFormProvider";
+import { FormMethods } from "./formMethods";
 
 export const FormStateBad = () => {
 	return (
@@ -13,7 +14,7 @@ export const FormStateBad = () => {
 			<AppFormProvider>
 				<div className="flex gap-3 flex-col">
 					<AppContextForm />
-					<FormStateSet />
+					<FormMethods />
 					<SubmitButtonBad />
 				</div>
 			</AppFormProvider>
@@ -47,7 +48,7 @@ export const FormStateGood = () => {
 			<AppFormProvider>
 				<div className="flex gap-3 flex-col">
 					<AppContextForm />
-					<FormStateSet />
+					<FormMethods />
 					<SubmitButtonGood />
 				</div>
 			</AppFormProvider>
@@ -81,17 +82,6 @@ export const FormState = () => {
 		<div className="flex gap-10">
 			<FormStateBad />
 			<FormStateGood />
-		</div>
-	);
-};
-
-const FormStateSet = () => {
-	const { setValue } = useFormContext<AppFormFields>();
-
-	return (
-		<div>
-			<Button onClick={() => setValue("name", "John")}>Set name</Button>
-			<RerenderCount />
 		</div>
 	);
 };

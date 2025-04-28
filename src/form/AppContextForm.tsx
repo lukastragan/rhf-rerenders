@@ -9,10 +9,10 @@ import type { AppFormFields } from "../types";
 
 export const AppContextForm = () => {
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="grid gap-2 grid-cols-2">
 			<NameField />
-			<SurnameField />
 			<NameRequiredField />
+			<SurnameField />
 			<SurnameRequiredField />
 		</div>
 	);
