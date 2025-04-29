@@ -4,36 +4,46 @@ import {
 	SurnameFieldWithControl,
 	NameRequiredFieldWithControl,
 	SurnameRequiredFieldWithControl,
+	type ControlledVariant,
 } from "./fields";
 import type { AppFormFields } from "../types";
 
-export const AppContextForm = () => {
+type AppContextFormProps = {
+	variant?: ControlledVariant;
+};
+export const AppContextForm = ({ variant }: AppContextFormProps) => {
 	return (
 		<div className="grid gap-2 grid-cols-2">
-			<NameField />
-			<NameRequiredField />
-			<SurnameField />
-			<SurnameRequiredField />
+			<NameField variant={variant} />
+			<NameRequiredField variant={variant} />
+			<SurnameField variant={variant} />
+			<SurnameRequiredField variant={variant} />
 		</div>
 	);
 };
 
-const NameField = () => {
-	const { control } = useFormContext<AppFormFields>();
-	return <NameFieldWithControl control={control} />;
+type FieldProps = {
+	variant?: ControlledVariant;
 };
 
-const SurnameField = () => {
+const NameField = ({ variant }: FieldProps) => {
 	const { control } = useFormContext<AppFormFields>();
-	return <SurnameFieldWithControl control={control} />;
+	return <NameFieldWithControl control={control} variant={variant} />;
 };
 
-const NameRequiredField = () => {
+const SurnameField = ({ variant }: FieldProps) => {
 	const { control } = useFormContext<AppFormFields>();
-	return <NameRequiredFieldWithControl control={control} />;
+	return <SurnameFieldWithControl control={control} variant={variant} />;
 };
 
-const SurnameRequiredField = () => {
+const NameRequiredField = ({ variant }: FieldProps) => {
 	const { control } = useFormContext<AppFormFields>();
-	return <SurnameRequiredFieldWithControl control={control} />;
+	return <NameRequiredFieldWithControl control={control} variant={variant} />;
+};
+
+const SurnameRequiredField = ({ variant }: FieldProps) => {
+	const { control } = useFormContext<AppFormFields>();
+	return (
+		<SurnameRequiredFieldWithControl control={control} variant={variant} />
+	);
 };

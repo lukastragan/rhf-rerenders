@@ -1,7 +1,12 @@
-import React, { useCallback, type FocusEventHandler } from "react";
+import React, {
+	useCallback,
+	type ComponentType,
+	type FocusEventHandler,
+} from "react";
 import {
 	useController,
 	type Control,
+	type ControllerFieldState,
 	type RegisterOptions,
 } from "react-hook-form";
 import { RerenderCount } from "../RerenderCount";
@@ -16,9 +21,15 @@ type InputProps = {
 	errorMessage: string | undefined;
 	onChange: (value: string) => void;
 	onBlur?: FocusEventHandler<HTMLInputElement>;
+	fieldState?: ControllerFieldState;
 };
 
-const Input = ({
+const fieldStateHandler = (fieldState: ControllerFieldState) => {
+	// We had something like this is our codebase, so that it is recommended to not use it
+	return { ...fieldState };
+};
+
+export const Input = ({
 	errorMessage,
 	invalid,
 	name,
@@ -27,6 +38,7 @@ const Input = ({
 	onChange,
 	onBlur,
 	inputRef,
+	fieldState,
 }: InputProps) => {
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,6 +46,10 @@ const Input = ({
 		},
 		[onChange],
 	);
+
+	if (fieldState) {
+		fieldStateHandler(fieldState);
+	}
 
 	const shouldIndicateError = invalid || errorMessage;
 
@@ -60,7 +76,7 @@ const Input = ({
 	);
 };
 
-type ControlledInputProps = {
+type ControlledInputBaseProps = {
 	name: keyof AppFormFields;
 	rules?: Omit<
 		RegisterOptions<AppFormFields>,
@@ -71,12 +87,35 @@ type ControlledInputProps = {
 	control: Control<AppFormFields>;
 };
 
+export type ControlledVariant = "default" | "fieldState";
+
+type ControlledInputProps = ControlledInputBaseProps & {
+	variant?: ControlledVariant;
+};
+
 const ControlledInput = ({
+	variant = "default",
+	...props
+}: ControlledInputProps) => {
+	const componentMap: Record<
+		ControlledVariant,
+		ComponentType<ControlledInputBaseProps>
+	> = {
+		default: ControlledDefaultInput,
+		fieldState: ControlledAllFieldStateInput,
+	};
+
+	const Component = componentMap[variant];
+
+	return <Component {...props} />;
+};
+
+const ControlledDefaultInput = ({
 	control,
 	name,
 	label,
 	rules,
-}: ControlledInputProps) => {
+}: ControlledInputBaseProps) => {
 	const { field, fieldState } = useController<AppFormFields>({
 		name,
 		control,
@@ -87,7 +126,7 @@ const ControlledInput = ({
 	return (
 		<Input
 			errorMessage={errorMessage}
-			invalid={false}
+			invalid={fieldState.invalid}
 			label={label}
 			name={name}
 			onChange={field.onChange}
@@ -98,28 +137,77 @@ const ControlledInput = ({
 	);
 };
 
-// --- Components Accepting 'control' Prop ---
+const ControlledAllFieldStateInput = ({
+	control,
+	name,
+	label,
+	rules,
+}: ControlledInputBaseProps) => {
+	const { field, fieldState } = useController<AppFormFields>({
+		name,
+		control,
+		rules,
+	});
+	const errorMessage = fieldState.error?.message;
 
-interface FieldWithControlProps {
-	control: Control<AppFormFields>;
-}
-
-export const NameFieldWithControl = ({ control }: FieldWithControlProps) => {
-	return <ControlledInput control={control} name="name" label="Name" />;
+	return (
+		<Input
+			errorMessage={errorMessage}
+			invalid={fieldState.invalid}
+			label={label}
+			name={name}
+			onChange={field.onChange}
+			value={field.value}
+			onBlur={field.onBlur}
+			inputRef={field.ref}
+			fieldState={fieldState}
+		/>
+	);
 };
 
-export const SurnameFieldWithControl = ({ control }: FieldWithControlProps) => {
-	return <ControlledInput control={control} name="surname" label="Surname" />;
+type FieldWithControlProps = {
+	control: Control<AppFormFields>;
+	variant?: ControlledVariant;
+};
+
+export const NameFieldWithControl = ({
+	control,
+	variant,
+}: FieldWithControlProps) => {
+	return (
+		<ControlledInput
+			control={control}
+			name="name"
+			label="Name"
+			variant={variant}
+		/>
+	);
+};
+
+export const SurnameFieldWithControl = ({
+	control,
+	variant,
+}: FieldWithControlProps) => {
+	return (
+		<ControlledInput
+			control={control}
+			name="surname"
+			label="Surname"
+			variant={variant}
+		/>
+	);
 };
 
 export const NameRequiredFieldWithControl = ({
 	control,
+	variant,
 }: FieldWithControlProps) => {
 	return (
 		<ControlledInput
 			control={control}
 			name="nameRequired"
 			label="Name required"
+			variant={variant}
 			rules={{
 				required: {
 					value: true,
@@ -132,12 +220,14 @@ export const NameRequiredFieldWithControl = ({
 
 export const SurnameRequiredFieldWithControl = ({
 	control,
+	variant,
 }: FieldWithControlProps) => {
 	return (
 		<ControlledInput
 			control={control}
 			name="surnameRequired"
 			label="Surname required"
+			variant={variant}
 			rules={{
 				required: {
 					value: true,

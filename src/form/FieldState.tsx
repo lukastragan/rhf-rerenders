@@ -7,61 +7,52 @@ import { AppContextForm } from "./AppContextForm";
 import { AppFormProvider } from "./AppFormProvider";
 import { FormMethods } from "./formMethods";
 
-export const FormStateBad = () => {
+export const FieldStateBad = () => {
 	return (
 		<div>
-			<Heading>form state bad usage</Heading>
+			<Heading>field state bad usage</Heading>
 			<AppFormProvider>
 				<div className="flex gap-3 flex-col">
-					<AppContextForm />
+					<AppContextForm variant="fieldState" />
 					<FormMethods />
-					<SubmitButtonBad />
+					<SubmitButton />
 				</div>
 			</AppFormProvider>
 		</div>
 	);
 };
 
-const SubmitButtonBad = () => {
-	const { formState, handleSubmit, trigger } = useFormContext<AppFormFields>();
-
-	const onSubmit = handleSubmit((data) => {
-		console.log(data);
-	});
-
-	const { isValid, isDirty } = formState;
-
-	const handleClick = () => (isValid ? onSubmit() : trigger());
-
+export const FieldStateGood = () => {
 	return (
 		<div>
-			<Button onClick={handleClick} disabled={!isDirty} isPrimary>
-				{isDirty ? "Submit" : "Fill values"}
-			</Button>
-			<RerenderCount />
-		</div>
-	);
-};
-
-export const FormStateGood = () => {
-	return (
-		<div>
-			<Heading>form state correct usage</Heading>
+			<Heading>field state correct usage</Heading>
 			<AppFormProvider>
 				<div className="flex gap-3 flex-col">
 					<AppContextForm />
 					<FormMethods />
-					<SubmitButtonGood />
+					<SubmitButton />
 				</div>
 			</AppFormProvider>
 		</div>
 	);
 };
 
-const SubmitButtonGood = () => {
+export const FieldState = () => {
+	return (
+		<div>
+			Check rerenders when changing fields with validation (required fields)
+			<div className="grid gap-10 grid-cols-2">
+				<FieldStateBad />
+				<FieldStateGood />
+			</div>
+		</div>
+	);
+};
+
+const SubmitButton = () => {
 	const { trigger, handleSubmit } = useFormContext<AppFormFields>();
 
-	const { isValid, isDirty } = useFormState();
+	const { isValid, isDirty } = useFormState<AppFormFields>();
 
 	const onSubmit = handleSubmit((data) => {
 		console.log(data);
@@ -75,18 +66,6 @@ const SubmitButtonGood = () => {
 				{isDirty ? "Submit" : "Fill values"}
 			</Button>
 			<RerenderCount />
-		</div>
-	);
-};
-
-export const FormState = () => {
-	return (
-		<div>
-			Check rerenders when form state changes (isDirty, isValid..)
-			<div className="grid gap-2 grid-cols-2">
-				<FormStateBad />
-				<FormStateGood />
-			</div>
 		</div>
 	);
 };

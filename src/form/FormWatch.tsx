@@ -72,9 +72,12 @@ export const FormWatchGood = () => {
 
 export const FormWatch = () => {
 	return (
-		<div className="grid gap-10 grid-cols-2">
-			<FormWatchBad />
-			<FormWatchGood />
+		<div>
+			Check rerenders when watched field changes
+			<div className="grid gap-10 grid-cols-2">
+				<FormWatchBad />
+				<FormWatchGood />
+			</div>
 		</div>
 	);
 };
