@@ -6,7 +6,7 @@ import {
 	SurnameRequiredFieldWithControl,
 } from "./form/fields";
 import { withFormWatch } from "./hooks/useFormWatch";
-import type { RerenderCount } from "./RerenderCount";
+import { RerenderCount } from "./RerenderCount";
 import type { AppFormFields } from "./types";
 
 const appForm = createFormControl<AppFormFields>({

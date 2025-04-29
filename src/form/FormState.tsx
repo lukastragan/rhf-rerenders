@@ -29,12 +29,14 @@ const SubmitButtonBad = () => {
 		console.log(data);
 	});
 
-	const handleClick = () => (formState.isValid ? onSubmit() : trigger());
+	const { isValid, isDirty } = formState;
+
+	const handleClick = () => (isValid ? onSubmit() : trigger());
 
 	return (
 		<div>
-			<Button onClick={handleClick} disabled={!formState.isDirty} isPrimary>
-				{formState.isDirty ? "Submit" : "Fill values"}
+			<Button onClick={handleClick} disabled={!isDirty} isPrimary>
+				{isDirty ? "Submit" : "Fill values"}
 			</Button>
 			<RerenderCount />
 		</div>
@@ -59,7 +61,7 @@ export const FormStateGood = () => {
 const SubmitButtonGood = () => {
 	const { trigger, handleSubmit } = useFormContext<AppFormFields>();
 
-	const { isValid, isDirty } = useFormState<AppFormFields>();
+	const { isValid, isDirty } = useFormState();
 
 	const onSubmit = handleSubmit((data) => {
 		console.log(data);
@@ -79,7 +81,7 @@ const SubmitButtonGood = () => {
 
 export const FormState = () => {
 	return (
-		<div className="flex gap-10">
+		<div className="grid gap-2 grid-cols-2">
 			<FormStateBad />
 			<FormStateGood />
 		</div>

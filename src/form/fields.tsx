@@ -1,4 +1,4 @@
-import { memo, useCallback, type FocusEventHandler } from "react";
+import React, { useCallback, type FocusEventHandler } from "react";
 import {
 	useController,
 	type Control,
@@ -17,6 +17,7 @@ type InputProps = {
 	onChange: (value: string) => void;
 	onBlur?: FocusEventHandler<HTMLInputElement>;
 };
+
 const Input = ({
 	errorMessage,
 	invalid,
@@ -76,13 +77,17 @@ const ControlledInput = ({
 	label,
 	rules,
 }: ControlledInputProps) => {
-	const { field, fieldState } = useController({ name, control, rules });
+	const { field, fieldState } = useController<AppFormFields>({
+		name,
+		control,
+		rules,
+	});
 	const errorMessage = fieldState.error?.message;
 
 	return (
 		<Input
 			errorMessage={errorMessage}
-			invalid={fieldState.invalid}
+			invalid={false}
 			label={label}
 			name={name}
 			onChange={field.onChange}

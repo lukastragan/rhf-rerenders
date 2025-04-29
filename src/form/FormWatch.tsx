@@ -80,7 +80,7 @@ export const FormWatch = () => {
 };
 
 const WatchedNameGood = () => {
-	const name = useFormWatch({
+	const name = useFormWatch<AppFormFields, "name">({
 		name: "name",
 	});
 
@@ -93,7 +93,7 @@ const WatchedNameGood = () => {
 };
 
 const WatchedNameRequiredGood = () => {
-	const nameRequired = useFormWatch({
+	const nameRequired = useFormWatch<AppFormFields, "nameRequired">({
 		name: "nameRequired",
 	});
 
