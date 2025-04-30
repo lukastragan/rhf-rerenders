@@ -1,4 +1,5 @@
 import React, {
+	memo,
 	useCallback,
 	type ComponentType,
 	type FocusEventHandler,
@@ -87,7 +88,7 @@ type ControlledInputBaseProps = {
 	control: Control<AppFormFields>;
 };
 
-export type ControlledVariant = "default" | "fieldState";
+export type ControlledVariant = "default" | "fieldState" | "memoized";
 
 type ControlledInputProps = ControlledInputBaseProps & {
 	variant?: ControlledVariant;
@@ -103,6 +104,7 @@ const ControlledInput = ({
 	> = {
 		default: ControlledDefaultInput,
 		fieldState: ControlledAllFieldStateInput,
+		memoized: ControlledMemoizedInput,
 	};
 
 	const Component = componentMap[variant];
@@ -125,6 +127,35 @@ const ControlledDefaultInput = ({
 
 	return (
 		<Input
+			errorMessage={errorMessage}
+			invalid={fieldState.invalid}
+			label={label}
+			name={name}
+			onChange={field.onChange}
+			value={field.value}
+			onBlur={field.onBlur}
+			inputRef={field.ref}
+		/>
+	);
+};
+
+const MemoizedInput = memo(Input);
+
+const ControlledMemoizedInput = ({
+	control,
+	name,
+	label,
+	rules,
+}: ControlledInputBaseProps) => {
+	const { field, fieldState } = useController<AppFormFields>({
+		name,
+		control,
+		rules,
+	});
+	const errorMessage = fieldState.error?.message;
+
+	return (
+		<MemoizedInput
 			errorMessage={errorMessage}
 			invalid={fieldState.invalid}
 			label={label}

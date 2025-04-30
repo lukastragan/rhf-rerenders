@@ -1,5 +1,4 @@
-import { useFormContext, useFormState } from "react-hook-form";
-import { Button } from "../components/Button";
+import { useFormContext } from "react-hook-form";
 import { Heading } from "../components/Heading";
 import { useFormWatch } from "../hooks/useFormWatch";
 import { RerenderCount } from "../RerenderCount";
@@ -7,6 +6,7 @@ import type { AppFormFields } from "../types";
 import { AppContextForm } from "./AppContextForm";
 import { AppFormProvider } from "./AppFormProvider";
 import { FormMethods } from "./formMethods";
+import { SubmitButton } from "./SubmitButton";
 
 export const FormWatchBad = () => {
 	return (
@@ -103,27 +103,6 @@ const WatchedNameRequiredGood = () => {
 	return (
 		<div>
 			<p>Watched nameRequired: {nameRequired}</p>
-			<RerenderCount />
-		</div>
-	);
-};
-
-const SubmitButton = () => {
-	const { trigger, handleSubmit } = useFormContext<AppFormFields>();
-
-	const { isValid, isDirty } = useFormState<AppFormFields>();
-
-	const onSubmit = handleSubmit((data) => {
-		console.log(data);
-	});
-
-	const handleClick = () => (isValid ? onSubmit() : trigger());
-
-	return (
-		<div>
-			<Button onClick={handleClick} disabled={!isDirty} isPrimary>
-				{isDirty ? "Submit" : "Fill values"}
-			</Button>
 			<RerenderCount />
 		</div>
 	);

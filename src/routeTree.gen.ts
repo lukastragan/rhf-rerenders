@@ -11,12 +11,26 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ResetImport } from './routes/reset'
+import { Route as MemoizedImport } from './routes/memoized'
 import { Route as FormwatchImport } from './routes/formwatch'
 import { Route as FormstateImport } from './routes/formstate'
 import { Route as FieldstateImport } from './routes/fieldstate'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const ResetRoute = ResetImport.update({
+  id: '/reset',
+  path: '/reset',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MemoizedRoute = MemoizedImport.update({
+  id: '/memoized',
+  path: '/memoized',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const FormwatchRoute = FormwatchImport.update({
   id: '/formwatch',
@@ -74,6 +88,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormwatchImport
       parentRoute: typeof rootRoute
     }
+    '/memoized': {
+      id: '/memoized'
+      path: '/memoized'
+      fullPath: '/memoized'
+      preLoaderRoute: typeof MemoizedImport
+      parentRoute: typeof rootRoute
+    }
+    '/reset': {
+      id: '/reset'
+      path: '/reset'
+      fullPath: '/reset'
+      preLoaderRoute: typeof ResetImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -84,6 +112,8 @@ export interface FileRoutesByFullPath {
   '/fieldstate': typeof FieldstateRoute
   '/formstate': typeof FormstateRoute
   '/formwatch': typeof FormwatchRoute
+  '/memoized': typeof MemoizedRoute
+  '/reset': typeof ResetRoute
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +121,8 @@ export interface FileRoutesByTo {
   '/fieldstate': typeof FieldstateRoute
   '/formstate': typeof FormstateRoute
   '/formwatch': typeof FormwatchRoute
+  '/memoized': typeof MemoizedRoute
+  '/reset': typeof ResetRoute
 }
 
 export interface FileRoutesById {
@@ -99,14 +131,29 @@ export interface FileRoutesById {
   '/fieldstate': typeof FieldstateRoute
   '/formstate': typeof FormstateRoute
   '/formwatch': typeof FormwatchRoute
+  '/memoized': typeof MemoizedRoute
+  '/reset': typeof ResetRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/fieldstate' | '/formstate' | '/formwatch'
+  fullPaths:
+    | '/'
+    | '/fieldstate'
+    | '/formstate'
+    | '/formwatch'
+    | '/memoized'
+    | '/reset'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/fieldstate' | '/formstate' | '/formwatch'
-  id: '__root__' | '/' | '/fieldstate' | '/formstate' | '/formwatch'
+  to: '/' | '/fieldstate' | '/formstate' | '/formwatch' | '/memoized' | '/reset'
+  id:
+    | '__root__'
+    | '/'
+    | '/fieldstate'
+    | '/formstate'
+    | '/formwatch'
+    | '/memoized'
+    | '/reset'
   fileRoutesById: FileRoutesById
 }
 
@@ -115,6 +162,8 @@ export interface RootRouteChildren {
   FieldstateRoute: typeof FieldstateRoute
   FormstateRoute: typeof FormstateRoute
   FormwatchRoute: typeof FormwatchRoute
+  MemoizedRoute: typeof MemoizedRoute
+  ResetRoute: typeof ResetRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +171,8 @@ const rootRouteChildren: RootRouteChildren = {
   FieldstateRoute: FieldstateRoute,
   FormstateRoute: FormstateRoute,
   FormwatchRoute: FormwatchRoute,
+  MemoizedRoute: MemoizedRoute,
+  ResetRoute: ResetRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +188,9 @@ export const routeTree = rootRoute
         "/",
         "/fieldstate",
         "/formstate",
-        "/formwatch"
+        "/formwatch",
+        "/memoized",
+        "/reset"
       ]
     },
     "/": {
@@ -151,6 +204,12 @@ export const routeTree = rootRoute
     },
     "/formwatch": {
       "filePath": "formwatch.tsx"
+    },
+    "/memoized": {
+      "filePath": "memoized.tsx"
+    },
+    "/reset": {
+      "filePath": "reset.tsx"
     }
   }
 }

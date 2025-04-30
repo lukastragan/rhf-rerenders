@@ -6,6 +6,7 @@ import type { AppFormFields } from "../types";
 import { AppContextForm } from "./AppContextForm";
 import { AppFormProvider } from "./AppFormProvider";
 import { FormMethods } from "./formMethods";
+import { SubmitButton } from "./SubmitButton";
 
 export const FormStateBad = () => {
 	return (
@@ -51,30 +52,9 @@ export const FormStateGood = () => {
 				<div className="flex gap-3 flex-col">
 					<AppContextForm />
 					<FormMethods />
-					<SubmitButtonGood />
+					<SubmitButton />
 				</div>
 			</AppFormProvider>
-		</div>
-	);
-};
-
-const SubmitButtonGood = () => {
-	const { trigger, handleSubmit } = useFormContext<AppFormFields>();
-
-	const { isValid, isDirty } = useFormState();
-
-	const onSubmit = handleSubmit((data) => {
-		console.log(data);
-	});
-
-	const handleClick = () => (isValid ? onSubmit() : trigger());
-
-	return (
-		<div>
-			<Button onClick={handleClick} disabled={!isDirty} isPrimary>
-				{isDirty ? "Submit" : "Fill values"}
-			</Button>
-			<RerenderCount />
 		</div>
 	);
 };
