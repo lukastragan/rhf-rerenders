@@ -2,6 +2,7 @@ import { useFormContext } from "react-hook-form";
 import { Button } from "../components/Button";
 import { RerenderCount } from "../RerenderCount";
 import type { AppFormFields } from "../types";
+import type { PropsWithChildren } from "react";
 
 type CommonProps = {
 	name: keyof AppFormFields;
@@ -62,7 +63,7 @@ export const SetAndTriggerContext = ({ name, value }: SetProps) => {
 	);
 };
 
-export const FormMethods = () => {
+export const FormMethods = ({ children }: PropsWithChildren) => {
 	const name: keyof AppFormFields = "name";
 	const nameRequired: keyof AppFormFields = "nameRequired";
 	const value = "John";
@@ -77,6 +78,7 @@ export const FormMethods = () => {
 			<ResetContextName name={nameRequired} />
 			<TriggerContextName name={nameRequired} />
 			<SetAndTriggerContext name={nameRequired} value={value} />
+			{children}
 		</div>
 	);
 };
